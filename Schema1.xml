@@ -1,0 +1,110 @@
+<Schema name="schema_injuries">
+  <Cube name="cube_injuries" visible="true" cache="true" enabled="true">
+    <Table name="injuries_sample">
+    </Table>
+    <!-- Geography -->
+    <Dimension type="StandardDimension" visible="true" foreignKey="Zip_FK" highCardinality="false" name="Address">
+      <Hierarchy name="Geo" visible="true" hasAll="true" primaryKey="Zip">
+        <Table name="location_sample">
+        </Table>
+        <Level name="State" visible="true" column="StateCode" nameColumn="StateLabel" ordinalColumn="StateLabel" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never">
+        </Level>
+        <Level name="City" visible="true" column="CityKey" nameColumn="CityLabel" ordinalColumn="CityLabel" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never">
+        </Level>
+        <Level name="Location" visible="true" column="Zip" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never">
+        </Level>
+      </Hierarchy>
+    </Dimension>
+    <!-- Date -->
+    <Dimension type="StandardDimension" visible="true" foreignKey="Date_FK" highCardinality="false" name="Date">
+      <Hierarchy name="Calendar" visible="true" hasAll="true" primaryKey="Zip">
+        <Table name="date">
+        </Table>
+        <Level name="Year" visible="true" column="" nameColumn="" ordinalColumn="" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never">
+        </Level>
+        <Level name="Month" visible="true" column="" nameColumn="" ordinalColumn="" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never">
+        </Level>
+        <Level name="Day" visible="true" column="Zip" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never">
+        </Level>
+      </Hierarchy>
+      <Hierarchy name="Week" visible="true" hasAll="true" primaryKey="Zip">
+        <Table name="date">
+        </Table>
+        <Level name="WeekEnd" visible="true" column="" nameColumn="" ordinalColumn="" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never">
+        </Level>
+        <Level name="WeekDay" visible="true" column="" nameColumn="" ordinalColumn="" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never">
+        </Level>
+        <Level name="Day" visible="true" column="Zip" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never">
+        </Level>
+      </Hierarchy>
+    </Dimension>
+    <!-- Nature -->
+    <Dimension type="StandardDimension" visible="true" foreignKey="Nature_FK" highCardinality="false" name="Nature">
+      <Hierarchy name="Nature" visible="true" hasAll="true" primaryKey="NatureCode">
+        <Table name="nature">
+        </Table>
+        <Level name="Nature" visible="true" column="NatureCode" nameColumn="NatureTitle" ordinalColumn="NatureTitle" parentColumn="NatureCodeParentFK" type="String" uniqueMembers="true" levelType="Regular" hideMemberIf="Never">
+        </Level>
+      </Hierarchy>
+    </Dimension>
+    <!-- Source -->
+    <Dimension type="StandardDimension" visible="true" foreignKey="Source_FK" highCardinality="false" name="Source">
+      <Hierarchy name="Source" visible="true" hasAll="true" primaryKey="SourceCode">
+        <Table name="source">
+        </Table>
+        <Level name="Source" visible="true" column="SourceCode" nameColumn="SourceTitle" ordinalColumn="SourceTitle" parentColumn="SourceCodeParentFK" type="String" uniqueMembers="true" levelType="Regular" hideMemberIf="Never">
+        </Level>
+      </Hierarchy>
+    </Dimension>
+    <!-- Event -->
+    <Dimension type="StandardDimension" visible="true" foreignKey="Event_FK" highCardinality="false" name="Event">
+      <Hierarchy name="Event" visible="true" hasAll="true" primaryKey="EventCode">
+        <Table name="event">
+        </Table>
+        <Level name="Event" visible="true" column="EventCode" nameColumn="EventTitle" ordinalColumn="EventTitle" parentColumn="EventCodeParentFK" type="String" uniqueMembers="true" levelType="Regular" hideMemberIf="Never">
+        </Level>
+      </Hierarchy>
+    </Dimension>
+    <!-- PrimarySource -->
+    <Dimension type="StandardDimension" visible="true" foreignKey="PrimarySource_FK" highCardinality="false" name="PrimarySource">
+      <Hierarchy name="PrimarySource" visible="true" hasAll="true" primaryKey="PrimarySourceCode">
+        <Table name="primarySource">
+        </Table>
+        <Level name="PrimarySource" visible="true" column="PrimarySourceCode" nameColumn="PrimarySourceTitle" ordinalColumn="PrimarySourceTitle" parentColumn="PrimarySourceCodeParentFK" type="String" uniqueMembers="true" levelType="Regular" hideMemberIf="Never">
+        </Level>
+      </Hierarchy>
+    </Dimension>
+    <!-- BodyPart -->
+    <Dimension type="StandardDimension" visible="true" foreignKey="BodyPart_FK" highCardinality="false" name="BodyPart">
+      <Hierarchy name="BodyPart" visible="true" hasAll="true" primaryKey="BodyPartCode">
+        <Table name="bodyPart">
+        </Table>
+        <Level name="BodyPart" visible="true" column="BodyPartCode" nameColumn="BodyPartTitle" ordinalColumn="BodyPartTitle" parentColumn="BodyPartCodeParentFK" type="String" uniqueMembers="true" levelType="Regular" hideMemberIf="Never">
+        </Level>
+      </Hierarchy>
+    </Dimension>
+    <!-- INDUSTRY (BABY) -->
+    <Dimension type="StandardDimension" visible="true" foreignKey="Naics_FK" highCardinality="false" name="Industry">
+      <Hierarchy name="Sector" visible="true" hasAll="true" primaryKey="SectorCode" primaryKeyTable="naics4">
+        <Join leftKey="Naics3FK" rightAlias="naics3" rightKey="SectorCode">
+          <Table name="naics4">
+          </Table>
+          <Join leftKey="Naics2FK" rightAlias="naics2" rightKey="SectorCode">
+            <Table name="naics3">
+            </Table>
+            <Table name="naics2">
+            </Table>
+          </Join>
+        </Join>
+        <Level name="Sector" visible="true" table="naics2" column="SectorCode" nameColumn="SectorTitle" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never">
+        </Level>
+        <Level name="SubSector" visible="true" table="naics3" column="SectorCode" nameColumn="SectorTitle" uniqueMembers="false" levelType="Regular">
+        </Level>
+        <Level name="Industry" visible="true" table="naics4" column="SectorCode" nameColumn="SectorTitle" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never">
+        </Level>
+      </Hierarchy>
+    </Dimension>
+    <Measure name="nb_injuries" column="UPA" aggregator="count" visible="true">
+    </Measure>
+  </Cube>
+</Schema>
